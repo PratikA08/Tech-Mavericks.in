@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Motor Health Monitoring | GCOEK</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="header-content">
+
+            <div>
+                <h1>Motor Health Monitoring</h1>
+
+                <p>IoT-Based Smart Motor Health Monitoring and Alert System</p>
+
+                <span>Government College of Engineering, Kolhapur</span>
+            </div>
+
+            <div class="connection-box">
+
+                <span id="connectionDot" class="dot offline"></span>
+
+                <span id="connectionText">Connecting...</span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="navigation">
+
+        <button class="nav-btn active" data-page="monitoring">
+            Live Monitoring
+        </button>
+
+        <button class="nav-btn" data-page="alerts">
+            Alerts & Limits
+        </button>
+
+        <button class="nav-btn" data-page="group">
+            Group Information
+        </button>
+
+    </nav>
+
+
+    <main class="container">
+
+
+        <!-- MONITORING PAGE -->
+
+        <section id="monitoring" class="page active">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Live Motor Monitoring</h2>
+
+                    <p>Real-time sensor readings from ESP32</p>
+                </div>
+
+                <span class="live-label">● LIVE SYSTEM</span>
+
+            </div>
+
+
+            <!-- SENSOR CARDS -->
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Motor Temperature
+                    </div>
+
+                    <div class="reading">
+                        <span id="temperature">--</span>
+                        <small>°C</small>
+                    </div>
+
+                    <p>Sensor: DS18B20</p>
+
+                    <div class="limit">
+                        Alert Limit: 60°C
+                    </div>
+
+                    <span id="tempStatus" class="status-badge waiting">
+                        WAITING
+                    </span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Motor Body Vibration
+                    </div>
+
+                    <div class="reading">
+                        <span id="vibration">--</span>
+                        <small>g RMS</small>
+                    </div>
+
+                    <p>Sensor: MPU6050</p>
+
+                    <div class="limit">
+                        Alert Limit: 0.150 g
+                    </div>
+
+                    <span id="vibrationStatus" class="status-badge waiting">
+                        WAITING
+                    </span>
+
+                </div>
+
+
+                <div class="card condition-card">
+
+                    <div class="card-title">
+                        Overall Motor Condition
+                    </div>
+
+                    <div id="motorCondition" class="condition">
+                        WAITING
+                    </div>
+
+                    <p id="alertMessage">
+                        Waiting for ESP32 data
+                    </p>
+
+                    <div id="lastUpdate">
+                        Last Update: --
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- GRAPHS -->
+
+            <div class="charts">
+
+                <div class="chart-box">
+
+                    <h3>Temperature Monitoring</h3>
+
+                    <canvas id="temperatureChart"></canvas>
+
+                </div>
+
+
+                <div class="chart-box">
+
+                    <h3>Vibration Monitoring</h3>
+
+                    <canvas id="vibrationChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <!-- SYSTEM INFORMATION -->
+
+            <div class="info-box">
+
+                <h3>Monitoring Unit Information</h3>
+
+                <div class="info-grid">
+
+                    <p><strong>Controller:</strong> ESP32 DevKit V1</p>
+
+                    <p><strong>Temperature Sensor:</strong> DS18B20</p>
+
+                    <p><strong>Vibration Sensor:</strong> MPU6050</p>
+
+                    <p><strong>Communication:</strong> Wi-Fi / HTTP</p>
+
+                    <p><strong>Backend:</strong> Render Cloud</p>
+
+                    <p><strong>Dashboard:</strong> Web Based</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ALERT PAGE -->
+
+        <section id="alerts" class="page">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Alerts & Monitoring Limits</h2>
+
+                    <p>Configured operating thresholds</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="alert-panel">
+
+                <h3>Temperature Alert</h3>
+
+                <p>
+                    If motor temperature reaches or exceeds 60°C,
+                    the system generates a High Temperature Alert.
+                </p>
+
+                <strong>Limit: 60°C</strong>
+
+            </div>
+
+
+            <div class="alert-panel">
+
+                <h3>Vibration Alert</h3>
+
+                <p>
+                    If motor body vibration reaches or exceeds
+                    0.150 g RMS, the system generates a
+                    High Vibration Alert.
+                </p>
+
+                <strong>Limit: 0.150 g RMS</strong>
+
+            </div>
+
+
+            <div class="alert-panel">
+
+                <h3>Alert Indication</h3>
+
+                <ul>
+
+                    <li>Red LED turns ON during an alert.</li>
+
+                    <li>Buzzer turns ON during an alert.</li>
+
+                    <li>Dashboard displays the alert message.</li>
+
+                    <li>Normal condition is displayed when both readings are below their limits.</li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="notice">
+
+                <strong>Note:</strong>
+
+                These are initial prototype testing limits.
+                Actual motor limits should be verified with
+                motor specifications and project guide before
+                practical deployment.
+
+            </div>
+
+        </section>
+
+
+
+        <!-- GROUP INFORMATION PAGE -->
+
+        <section id="group" class="page">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Group Information</h2>
+
+                    <p>Project and team details</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>Project Details</h3>
+
+                <p>
+                    <strong>Project Title:</strong>
+                    IoT-Based Smart Motor Health Monitoring and Alert System
+                </p>
+
+                <p>
+                    <strong>College:</strong>
+                    Government College of Engineering, Kolhapur
+                </p>
+
+                <p>
+                    <strong>Department:</strong>
+                    Electrical Engineering
+                </p>
+
+                <p>
+                    <strong>Academic Year:</strong>
+                    2026–27
+                </p>
+
+                <p>
+                    <strong>Project Location:</strong>
+                    Electrical Machine Lab
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>Project Team</h3>
+
+                <p>
+                    <strong>Group Name:</strong>
+                    <span id="groupName">Enter Group Name</span>
+                </p>
+
+                <p>
+                    <strong>Team Members:</strong>
+                </p>
+
+                <ul id="memberList">
+
+                    <li>Member 1 Name</li>
+
+                    <li>Member 2 Name</li>
+
+                    <li>Member 3 Name</li>
+
+                </ul>
+
+                <p>
+                    <strong>Project Guide:</strong>
+                    <span id="guideName">Enter Guide Name</span>
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>Project Objective</h3>
+
+                <p>
+                    The main objective of this project is to monitor
+                    motor temperature and body vibration using ESP32
+                    and sensors. The system provides real-time
+                    monitoring through a web dashboard and generates
+                    alerts when the configured limits are exceeded.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            Electrical Engineering Department |
+            Government College of Engineering, Kolhapur
+        </p>
+
+        <p>
+            Academic Year 2026–27
+        </p>
+
+    </footer>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
